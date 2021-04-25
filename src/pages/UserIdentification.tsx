@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/core'
 import React, { useState } from 'react'
 import { 
     SafeAreaView, 
@@ -9,8 +8,11 @@ import {
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Platform,
-    Keyboard
+    Keyboard,
+    Alert
 } from 'react-native'
+import { useNavigation } from '@react-navigation/core'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button } from '../components/Button'
 
@@ -38,13 +40,12 @@ export function UserIdentification(){
         setName(value);
     }
 
-    function handleSubmit(){
-        try {
-            isFilled &&
-                navigation.navigate("Confirmation")
-        } catch (error) {
-            console.log(error.message)
-        }
+    async function handleSubmit(){
+        if(!name)
+            return Alert.alert("Me diz como devo lhe chamar 😅")
+            
+        await AsyncStorage.setItem("@plantmanager:user", name)
+        navigation.navigate("Confirmation")
     }
 
     return (
