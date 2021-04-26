@@ -2,6 +2,7 @@ CÓDIGO DO DESAFIO:
 AULA 01: missaoespacial
 AULA 02: embuscadoproximonivel
 AULA 03: astronautas
+AULA 04: universoinfinito
 
 Rodar arquivo no json-serve
 json-server ./src/services/server.json --host 192.168.1.108 --port 3333
