@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import { useNavigation } from '@react-navigation/core'
 
 import { EnvironmentButton } from '../components/EnvironmentButton'
 import { Header } from '../components/Header'
@@ -10,34 +11,28 @@ import api from '../services/api'
 
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
+import { PlantProps } from '../libs/storage'
 
 interface EnviromentProps{
     key: string;
     title: string;
 }
 
-interface PlantsProps{
-    id: string;
-    name: string;
-    about: string;
-    waterTips: string;
-    photo: string;
-    environments: [string];
-    frequency: {
-        times: number;
-        repeat: string
-    }
-}
-
 export function PlantSelect(){
     const [environments, setEnvironments] = useState<EnviromentProps[]>([]);
-    const [plants, setPlants] = useState<PlantsProps[]>([]);
-    const [filteredPlants, setFilteredPlants] = useState<PlantsProps[]>([]);
+    const [plants, setPlants] = useState<PlantProps[]>([]);
+    const [filteredPlants, setFilteredPlants] = useState<PlantProps[]>([]);
     const [environmentSelected, setEnvironmentSelected] = useState("all");
     const [loading, setLoading] = useState(true);
 
     const [page, setPage] = useState(1);
     const [loadMore, setLoadMore] = useState(true);
+
+    const navigation = useNavigation();
+
+    function handlePlantSelect(plant:PlantProps){
+        navigation.navigate("PlantSave", {plant});
+    }
 
     async function fetchPlants(){
         const { data } = await api
@@ -135,6 +130,7 @@ export function PlantSelect(){
                     renderItem={({ item }) => (
                         <PlantCardPrimary
                             data={item}
+                            onPress={() => handlePlantSelect(item)}
                         />
                     )}
                     showsVerticalScrollIndicator={false}
